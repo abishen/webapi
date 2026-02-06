@@ -3,11 +3,11 @@
 This is a simple Go web API that demonstrates how to create a RESTful API using the `net/http` package. The API provides endpoints for managing a list of items, allowing you to create, read, update, and delete items.
 
 ## Features
-- Create a new item
-- Retrieve all items
-- Retrieve a specific item by ID
-- Update an existing item
-- Delete an item
+- Create a new Album
+- Retrieve all albums
+- Retrieve a specific album by ID
+- Update an existing album
+- Delete an album
 ## Getting Started
 To get started with this API, follow the instructions below.
 ### Prerequisites
