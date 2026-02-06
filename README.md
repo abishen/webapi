@@ -39,3 +39,24 @@ The API will start on `http://localhost:8080`.  You can use tools like `curl` or
 - `POST /albums`: Create a new album
 - `PUT /albums/{id}`: Update an existing album
 - `DELETE /albums/{id}`: Delete an album
+
+// create uml class diagram for the API
+
+```plantuml
+@startuml
+class Album {
+    +ID: int
+    +Title: string
+    +Artist: string
+    +Price: float
+}
+class AlbumHandler {
+    +GetAlbums(w http.ResponseWriter, r *http.Request)
+    +GetAlbumByID(w http.ResponseWriter, r *http.Request)
+    +CreateAlbum(w http.ResponseWriter, r *http.Request)
+    +UpdateAlbum(w http.ResponseWriter, r *http.Request)
+    +DeleteAlbum(w http.ResponseWriter, r *http.Request)
+}
+AlbumHandler --> Album : manages
+@enduml
+```
