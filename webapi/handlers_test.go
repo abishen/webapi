@@ -61,3 +61,37 @@ func TestGetAlbumByIDNotFound(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, "album not found", got["message"])
 }
+
+func TestDeleteAlbum(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	router := gin.New()
+	RegisterRoutes(router)
+
+	req := httptest.NewRequest(http.MethodDelete, "/album/1", nil)
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	var got map[string]string
+	err := json.Unmarshal(w.Body.Bytes(), &got)
+	assert.NoError(t, err)
+	assert.Equal(t, "album deleted", got["message"])
+}
+
+func TestDeleteAlbumNotFound(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	router := gin.New()
+	RegisterRoutes(router)
+
+	req := httptest.NewRequest(http.MethodDelete, "/album/999", nil)
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusNotFound, w.Code)
+
+	var got map[string]string
+	err := json.Unmarshal(w.Body.Bytes(), &got)
+	assert.NoError(t, err)
+	assert.Equal(t, "album not found", got["message"])
+}
