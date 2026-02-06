@@ -59,4 +59,4 @@ class AlbumHandler {
 }
 AlbumHandler --> Album : manages
 @enduml
-```
+```This UML class diagram represents the structure of the Go web API. The `Album` class represents the data model for an album, while the `AlbumHandler` class contains methods for handling HTTP requests related to albums. The `AlbumHandler` class manages the `Album` class, indicating that it performs operations on the album data.
