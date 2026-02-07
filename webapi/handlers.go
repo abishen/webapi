@@ -18,7 +18,7 @@ func getAlbumByID(c *gin.Context) {
 			return
 		}
 	}
-	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "album not found"})
+	c.IndentedJSON(http.StatusNoContent, gin.H{"message": "album not found"})
 }
 func postAlbum(c *gin.Context) {
 	var newAlbum album
@@ -42,7 +42,7 @@ func deleteAlbum(c *gin.Context) {
 			return
 		}
 	}
-	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "album not found"})
+	c.IndentedJSON(http.StatusNoContent, gin.H{"message": "album not found"})
 }
 
 func RegisterRoutes(router *gin.Engine) {
