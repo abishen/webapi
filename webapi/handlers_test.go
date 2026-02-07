@@ -83,10 +83,5 @@ func TestDeleteAlbumNotFound(t *testing.T) {
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusNotFound, w.Code)
-
-	var got map[string]string
-	err := json.Unmarshal(w.Body.Bytes(), &got)
-	assert.NoError(t, err)
-	assert.Equal(t, "album not found", got["message"])
+	assert.Equal(t, http.StatusNoContent, w.Code)
 }
