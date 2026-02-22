@@ -10,6 +10,7 @@ type Config struct {
 	ServerAddr string
 	GinMode    string
 	Port       string
+	DBPath     string
 }
 
 // LoadConfig loads configuration from environment variables
@@ -33,10 +34,16 @@ func LoadConfig() *Config {
 		port = "8080"
 	}
 
+	dbPath := os.Getenv("DB_PATH")
+	if dbPath == "" {
+		dbPath = "albums.db"
+	}
+
 	return &Config{
 		ServerAddr: addr,
 		GinMode:    mode,
 		Port:       port,
+		DBPath:     dbPath,
 	}
 }
 

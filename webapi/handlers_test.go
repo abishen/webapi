@@ -10,8 +10,62 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// MockAlbumStore is a mock implementation of AlbumStore for testing
+type MockAlbumStore struct {
+	albums map[string]*Album
+}
+
+func NewMockAlbumStore() *MockAlbumStore {
+	return &MockAlbumStore{
+		albums: make(map[string]*Album),
+	}
+}
+
+func (m *MockAlbumStore) GetAllAlbums() ([]Album, error) {
+	result := make([]Album, 0, len(m.albums))
+	for _, a := range m.albums {
+		result = append(result, *a)
+	}
+	return result, nil
+}
+
+func (m *MockAlbumStore) GetAlbumByID(id string) (*Album, error) {
+	if album, exists := m.albums[id]; exists {
+		return album, nil
+	}
+	return nil, nil
+}
+
+func (m *MockAlbumStore) CreateAlbum(album *Album) error {
+	if _, exists := m.albums[album.ID]; exists {
+		return nil // Simulate already exists condition
+	}
+	a := *album
+	m.albums[album.ID] = &a
+	return nil
+}
+
+func (m *MockAlbumStore) DeleteAlbum(id string) error {
+	delete(m.albums, id)
+	return nil
+}
+
+func (m *MockAlbumStore) UpdateAlbum(id string, album *Album) error {
+	m.albums[id] = album
+	return nil
+}
+
+func initTestStore() {
+	store := NewMockAlbumStore()
+	store.CreateAlbum(&Album{ID: "1", Title: "Blue Train", Artist: "John Coltrane", Price: 56.99})
+	store.CreateAlbum(&Album{ID: "2", Title: "Jeru", Artist: "Gerry Mulligan", Price: 17.99})
+	store.CreateAlbum(&Album{ID: "3", Title: "Sarah Vaughan and Clifford Brown", Artist: "Sarah Vaughan", Price: 39.99})
+	SetAlbumStore(store)
+}
+
 func TestGetAlbums(t *testing.T) {
 	gin.SetMode(gin.TestMode)
+	initTestStore()
 	router := gin.New()
 	RegisterRoutes(router)
 
@@ -21,14 +75,15 @@ func TestGetAlbums(t *testing.T) {
 
 	assert.Equal(t, http.StatusOK, w.Code)
 
-	var got []album
+	var got []Album
 	err := json.Unmarshal(w.Body.Bytes(), &got)
 	assert.NoError(t, err)
-	assert.Len(t, got, len(albums))
+	assert.Len(t, got, 3)
 }
 
 func TestGetAlbumByID(t *testing.T) {
 	gin.SetMode(gin.TestMode)
+	initTestStore()
 	router := gin.New()
 	RegisterRoutes(router)
 
@@ -38,7 +93,7 @@ func TestGetAlbumByID(t *testing.T) {
 
 	assert.Equal(t, http.StatusOK, w.Code)
 
-	var got album
+	var got Album
 	err := json.Unmarshal(w.Body.Bytes(), &got)
 	assert.NoError(t, err)
 	assert.Equal(t, "1", got.ID)
@@ -47,6 +102,7 @@ func TestGetAlbumByID(t *testing.T) {
 
 func TestGetAlbumByIDNotFound(t *testing.T) {
 	gin.SetMode(gin.TestMode)
+	initTestStore()
 	router := gin.New()
 	RegisterRoutes(router)
 
@@ -64,6 +120,7 @@ func TestGetAlbumByIDNotFound(t *testing.T) {
 
 func TestPostAlbum(t *testing.T) {
 	gin.SetMode(gin.TestMode)
+	initTestStore()
 	router := gin.New()
 	RegisterRoutes(router)
 
@@ -76,6 +133,7 @@ func TestPostAlbum(t *testing.T) {
 
 func TestDeleteAlbum(t *testing.T) {
 	gin.SetMode(gin.TestMode)
+	initTestStore()
 	router := gin.New()
 	RegisterRoutes(router)
 
@@ -93,6 +151,7 @@ func TestDeleteAlbum(t *testing.T) {
 
 func TestDeleteAlbumNotFound(t *testing.T) {
 	gin.SetMode(gin.TestMode)
+	initTestStore()
 	router := gin.New()
 	RegisterRoutes(router)
 

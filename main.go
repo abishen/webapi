@@ -11,6 +11,16 @@ func main() {
 	// Load configuration
 	config := webapi.LoadConfig()
 
+	// Initialize database
+	if err := webapi.InitDB(config.DBPath); err != nil {
+		log.Fatalf("Failed to initialize database: %v\n", err)
+	}
+	defer webapi.CloseDB()
+
+	// Create and set album store
+	store := webapi.NewGormAlbumStore(webapi.DB)
+	webapi.SetAlbumStore(store)
+
 	// Set gin mode from config
 	gin.SetMode(config.GinMode)
 
