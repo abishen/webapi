@@ -24,8 +24,8 @@ The application follows a clean, modular structure:
 
 ### Prerequisites
 
-- Go 1.25 or higher
-- Gin framework (automatically handled by `go mod`)
+- [Go](https://go.dev/dl/) 1.25 or higher
+- [Gin](https://gin-gonic.com/en/docs/) framework (automatically handled by `go mod`)
 
 ### Installation
 
